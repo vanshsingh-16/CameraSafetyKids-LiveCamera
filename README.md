@@ -15,6 +15,6 @@ From the project directory:
 
 If you publish this as a Git repository, the intended short setup is:
 
-`git clone YOUR_REPO_URL && cd CamSafetyKids-LiveCamera && bash start.sh`
+`git clone https://github.com/vanshsingh-16/CameraSafetyKids-LiveCamera && cd CamSafetyKids-LiveCamera && bash start.sh`
 
 If `cloudflared` is installed, `start.sh` will automatically start a temporary HTTPS tunnel. Otherwise it starts only on localhost.
