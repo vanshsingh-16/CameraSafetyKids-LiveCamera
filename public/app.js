@@ -8,4 +8,15 @@ socket.on('answer',async ans=>{if(pc)await pc.setRemoteDescription(ans)});
 socket.on('ice',async c=>{try{if(pc)await pc.addIceCandidate(c)}catch(e){}});
 socket.on('camera-stop',()=>{if($('remote').srcObject){$('remote').srcObject.getTracks().forEach(t=>t.stop());$('remote').srcObject=null}status('Child stopped the camera.');});
 $('start').onclick=async()=>{if(!pc)await makePC();localStream=await navigator.mediaDevices.getUserMedia({video:true,audio:true});$('local').srcObject=localStream;localStream.getTracks().forEach(t=>pc.addTrack(t,localStream));const offer=await pc.createOffer();await pc.setLocalDescription(offer);socket.emit('offer',offer);status('🔴 Camera + 🎙️ Microphone are ON — streaming with visible indicators.');};
+
+$('micToggle').onclick=()=>{
+  if(!localStream) return status('Start the camera first.');
+  const track=localStream.getAudioTracks()[0];
+  if(!track) return status('Microphone is not available or permission was denied.');
+  track.enabled=!track.enabled;
+  $('micToggle').textContent=track.enabled?'🎙️ Microphone ON':'🔇 Microphone OFF';
+  $('micStatus').textContent=track.enabled?'Microphone is ON':'Microphone is OFF';
+  status(track.enabled?'🔴 Camera + 🎙️ Microphone are ON.':'🔴 Camera ON · 🔇 Microphone OFF.');
+};
+
 $('stop').onclick=()=>{if(localStream)localStream.getTracks().forEach(t=>t.stop());socket.emit('camera-stop');status('Camera stopped.');};
