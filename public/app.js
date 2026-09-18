@@ -7,5 +7,5 @@ socket.on('offer',async offer=>{if($('role').value!=='parent')return;await makeP
 socket.on('answer',async ans=>{if(pc)await pc.setRemoteDescription(ans)});
 socket.on('ice',async c=>{try{if(pc)await pc.addIceCandidate(c)}catch(e){}});
 socket.on('camera-stop',()=>{if($('remote').srcObject){$('remote').srcObject.getTracks().forEach(t=>t.stop());$('remote').srcObject=null}status('Child stopped the camera.');});
-$('start').onclick=async()=>{if(!pc)await makePC();localStream=await navigator.mediaDevices.getUserMedia({video:true,audio:false});$('local').srcObject=localStream;localStream.getTracks().forEach(t=>pc.addTrack(t,localStream));const offer=await pc.createOffer();await pc.setLocalDescription(offer);socket.emit('offer',offer);status('🔴 Camera is ON — streaming with visible indicator.');};
+$('start').onclick=async()=>{if(!pc)await makePC();localStream=await navigator.mediaDevices.getUserMedia({video:true,audio:true});$('local').srcObject=localStream;localStream.getTracks().forEach(t=>pc.addTrack(t,localStream));const offer=await pc.createOffer();await pc.setLocalDescription(offer);socket.emit('offer',offer);status('🔴 Camera + 🎙️ Microphone are ON — streaming with visible indicators.');};
 $('stop').onclick=()=>{if(localStream)localStream.getTracks().forEach(t=>t.stop());socket.emit('camera-stop');status('Camera stopped.');};
